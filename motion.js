@@ -312,7 +312,7 @@ function paintBoard() {
     any = true;
     const row = document.createElement("li");
     const name = document.createElement("span");
-    name.textContent = `${dish.name} · ${count}`;
+    name.textContent = `${dish.name} · ${dish.price} · ${count}`;
     const less = document.createElement("button");
     less.type = "button";
     less.dataset.less = String(id);
@@ -335,7 +335,7 @@ function paintBoard() {
     const row = document.createElement("li");
     const name = document.createElement("span");
     const waiting = board.requests[id] || 0;
-    name.textContent = waiting ? `${dish.name} · ${waiting} waiting` : dish.name;
+    name.textContent = waiting ? `${dish.name} · ${dish.price} · ${waiting} waiting` : `${dish.name} · ${dish.price}`;
     const toggle = document.createElement("button");
     toggle.type = "button";
     const on = board.available[id] !== false;
