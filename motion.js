@@ -123,6 +123,8 @@ function showDish(id) {
   if (!dish || id === shown) return;
   shown = id;
   live.textContent = dish.name;
+  const plateLabel = document.getElementById("plateLabel");
+  if (plateLabel) plateLabel.textContent = dish.name;
   if (nowName) nowName.textContent = dish.name;
   if (nowNote) nowNote.textContent = dish.note;
   if (nowPrice) nowPrice.textContent = dish.price;
@@ -264,12 +266,21 @@ pickable.forEach((row) => {
   if (price) row.dataset.price = price.textContent;
 });
 
-let board = { available: dishes.map(() => true), requests: dishes.map(() => 0) };
+function freshBoard() {
+  return { available: dishes.map(() => true), requests: dishes.map(() => 0) };
+}
+
+let board = freshBoard();
 try {
   const saved = JSON.parse(localStorage.getItem("orla-board") || "null");
-  if (saved && Array.isArray(saved.available) && Array.isArray(saved.requests)) board = saved;
+  const ok = saved
+    && Array.isArray(saved.available)
+    && Array.isArray(saved.requests)
+    && saved.available.length === dishes.length
+    && saved.requests.length === dishes.length;
+  if (ok) board = saved;
 } catch (error) {
-  board = { available: dishes.map(() => true), requests: dishes.map(() => 0) };
+  board = freshBoard();
 }
 
 function saveBoard() {
@@ -284,21 +295,13 @@ function requestDish(id) {
 }
 
 function paintBoard() {
-  availList.innerHTML = "";
-  dishes.forEach((dish, id) => {
-    const row = document.createElement("li");
-    const name = document.createElement("span");
-    name.textContent = dish.name;
-    const price = document.createElement("span");
-    price.className = "price";
-    price.textContent = dish.price;
-    const add = document.createElement("button");
-    add.type = "button";
-    add.textContent = board.available[id] ? "Add" : "Off";
-    add.disabled = !board.available[id];
-    add.addEventListener("click", () => requestDish(id));
-    row.append(name, price, add);
-    availList.append(row);
+  document.querySelectorAll("[data-add]").forEach((button) => {
+    const id = Number(button.dataset.add);
+    const on = board.available[id] !== false;
+    button.textContent = on ? "Add" : "Off";
+    button.disabled = !on;
+    const row = button.closest("li");
+    if (row) row.classList.toggle("is-off", !on);
   });
 
   prepList.innerHTML = "";
@@ -312,11 +315,8 @@ function paintBoard() {
     name.textContent = `${dish.name} · ${count}`;
     const less = document.createElement("button");
     less.type = "button";
+    less.dataset.less = String(id);
     less.textContent = "Less";
-    less.addEventListener("click", () => {
-      board.requests[id] = Math.max(0, board.requests[id] - 1);
-      saveBoard();
-    });
     row.append(name, less);
     prepList.append(row);
   });
@@ -341,10 +341,7 @@ function paintBoard() {
     const on = board.available[id] !== false;
     toggle.textContent = on ? "On" : "Off";
     toggle.classList.toggle("is-off", !on);
-    toggle.addEventListener("click", () => {
-      board.available[id] = !on;
-      saveBoard();
-    });
+    toggle.dataset.toggle = String(id);
     row.append(name, toggle);
     kitchenList.append(row);
   });
@@ -376,6 +373,28 @@ function paintHold(hold) {
   holdBox.hidden = false;
   holdBox.textContent = `Table held for ${hold.name} · ${hold.when} · ${hold.guests} guests.`;
 }
+
+document.addEventListener("click", (event) => {
+  const add = event.target.closest("[data-add]");
+  if (add && !add.disabled) {
+    event.preventDefault();
+    requestDish(Number(add.dataset.add));
+    return;
+  }
+  const less = event.target.closest("[data-less]");
+  if (less) {
+    const id = Number(less.dataset.less);
+    board.requests[id] = Math.max(0, (board.requests[id] || 0) - 1);
+    saveBoard();
+    return;
+  }
+  const toggle = event.target.closest("[data-toggle]");
+  if (toggle) {
+    const id = Number(toggle.dataset.toggle);
+    board.available[id] = board.available[id] === false;
+    saveBoard();
+  }
+});
 
 requestPlate.addEventListener("click", () => requestDish(shown));
 

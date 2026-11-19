@@ -7,24 +7,54 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=board" />
+  <link rel="stylesheet" href="styles.css?v=model" />
 </head>
 <body>
+  <div class="app">
+  <header class="bar">
+    <div class="brand">
+      <p class="kicker">Evening service</p>
+      <strong>ORLA</strong>
+    </div>
+    <p class="bar-note">Tue – Sun, 6 to 11 · 14 Linen Yard</p>
+  </header>
   <div class="field">
   <aside class="wing wing-left">
     <p class="kicker">Available tonight</p>
-    <h2>What we can serve.</h2>
-    <p class="lede">Add a plate before you arrive. The kitchen starts it, and cooks only what was asked for.</p>
-    <ul class="avail" id="avail"></ul>
-    <figure class="room">
-      <img src="assets/room.jpg" alt="Candlelit table at ORLA" />
-      <figcaption>From seven · eighteen seats</figcaption>
-    </figure>
-    <dl class="facts">
-      <div><dt>Hours</dt><dd>Tue – Sun, 6 to 11</dd></div>
-      <div><dt>Room</dt><dd>14 Linen Yard</dd></div>
-      <div><dt>Kitchen</dt><dd>Wood fire, short menu</dd></div>
-    </dl>
+    <h2>Order before you arrive.</h2>
+    <p class="lede">These plates can be served now. Add what you want, and the kitchen starts only those.</p>
+    <ul class="avail" id="avail">
+      <li data-id="0">
+        <img src="assets/salad.jpg" alt="" />
+        <span class="dish-copy"><strong>Market plate</strong><em>Avocado, tomato, chickpea</em></span>
+        <b>18</b>
+        <button type="button" data-add="0">Add</button>
+      </li>
+      <li data-id="1">
+        <img src="assets/greens.jpg" alt="" />
+        <span class="dish-copy"><strong>Garden bowl</strong><em>Tomato, carrot, cucumber</em></span>
+        <b>16</b>
+        <button type="button" data-add="1">Add</button>
+      </li>
+      <li data-id="2">
+        <img src="assets/pasta.jpg" alt="" />
+        <span class="dish-copy"><strong>Herb farfalle</strong><em>Basil pasta, torn tomato</em></span>
+        <b>17</b>
+        <button type="button" data-add="2">Add</button>
+      </li>
+      <li data-id="3">
+        <img src="assets/grain.jpg" alt="" />
+        <span class="dish-copy"><strong>Chickpea bowl</strong><em>Fig, olive, yogurt</em></span>
+        <b>19</b>
+        <button type="button" data-add="3">Add</button>
+      </li>
+      <li data-id="4">
+        <img src="assets/roast.jpg" alt="" />
+        <span class="dish-copy"><strong>Roasted plate</strong><em>Carrot, sprout, quinoa</em></span>
+        <b>14</b>
+        <button type="button" data-add="4">Add</button>
+      </li>
+    </ul>
   </aside>
     <div class="stage" id="stage">
       <div class="linen" aria-hidden="true"></div>
@@ -78,6 +108,7 @@
       </section>
 
       <section class="half bottom" id="plateStage">
+        <p class="plate-label" id="plateLabel">Market plate</p>
         <div class="plate" data-plate="0">
           <figure class="dish-photo">
             <img src="assets/salad.jpg" alt="Market plate" style="--zoom: 1.22; object-position: 50% 46%" />
@@ -129,6 +160,7 @@
     <p class="hold" id="hold" hidden></p>
   </aside>
   </div>
+  </div>
 
   <dialog class="sheet" id="kitchen">
     <div class="sheet-head">
@@ -171,6 +203,6 @@
     </form>
   </dialog>
 
-  <script src="motion.js"></script>
+  <script src="motion.js?v=model"></script>
 </body>
 </html>
