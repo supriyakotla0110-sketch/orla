@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ORLA — evening table</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=phone" />
+</head>
+<body>
+  <div class="field">
+  <aside class="wing wing-left">
+    <p class="kicker">Evening service</p>
+    <h2>A quiet room for a long table.</h2>
+    <p class="lede">Four plates, rewritten each night. The menu moves, and the dish on the cloth follows the hand.</p>
+    <figure class="room">
+      <img src="assets/room.jpg" alt="Candlelit table at ORLA" />
+      <figcaption>From seven · eighteen seats</figcaption>
+    </figure>
+    <dl class="facts">
+      <div><dt>Hours</dt><dd>Tue – Sun, 6 to 11</dd></div>
+      <div><dt>Room</dt><dd>14 Linen Yard</dd></div>
+      <div><dt>Kitchen</dt><dd>Wood fire, short menu</dd></div>
+    </dl>
+  </aside>
+    <div class="stage" id="stage">
+      <div class="linen" aria-hidden="true"></div>
+
+      <section class="half top">
+        <div class="reel-head">
+          <p class="live" id="live">Market plate</p>
+          <button class="pause-btn" id="playToggle" type="button" aria-label="Pause">
+            <svg viewBox="0 0 24 24" id="playIcon" aria-hidden="true">
+              <path class="pause-bars" d="M7 5h3.2v14H7zM13.8 5H17v14h-3.2z" />
+              <path class="play-tri" d="M8 5.5v13l11-6.5z" />
+            </svg>
+            <span id="playLabel">Pause</span>
+          </button>
+        </div>
+        <div class="book" id="book">
+          <div class="cover-edge" aria-hidden="true"></div>
+          <div class="page left">
+            <h1>ORLA</h1>
+          </div>
+          <div class="page right">
+            <ol class="menu" id="menu">
+              <li class="label">To begin</li>
+              <li data-dish="0"><span>Market plate</span><em>18</em></li>
+              <li data-dish="1"><span>Garden bowl</span><em>16</em></li>
+              <li data-dish="4"><span>Roasted plate</span><em>14</em></li>
+              <li class="label">Garden</li>
+              <li data-dish="2"><span>Herb farfalle</span><em>17</em></li>
+              <li data-dish="3"><span>Chickpea bowl</span><em>19</em></li>
+              <li data-dish="4"><span>Herb roast</span><em>11</em></li>
+              <li class="label">Later</li>
+              <li data-dish="1"><span>Citrus greens</span><em>13</em></li>
+              <li data-dish="3"><span>Fig and yogurt</span><em>12</em></li>
+            </ol>
+            <img class="hand" id="hand" src="assets/hand.png" alt="" />
+          </div>
+          <svg class="tassel" viewBox="0 0 46 200" aria-hidden="true">
+            <path d="M23 0v34" stroke="#a11f28" stroke-width="2.4" />
+            <path d="M10 36c8-10 18-10 26 0l-4 16H14z" fill="#b4232c" />
+            <path d="M16 52h14l-1 10H17z" fill="#8e1b23" />
+            <g fill="none" stroke-linecap="round">
+              <path d="M14 62c-2 36-4 70-8 112" stroke="#c4323a" stroke-width="1.7" />
+              <path d="M18 62c-1 40 0 74-2 116" stroke="#d4484e" stroke-width="1.5" />
+              <path d="M23 62c1 42 2 78 1 120" stroke="#b4232c" stroke-width="1.8" />
+              <path d="M28 62c2 38 3 72 6 114" stroke="#c4323a" stroke-width="1.5" />
+              <path d="M32 62c3 34 6 66 11 108" stroke="#9d1d26" stroke-width="1.6" />
+              <path d="M20 64c-4 30-8 62-6 100" stroke="#e06a6e" stroke-width="1.1" />
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <section class="half bottom" id="plateStage">
+        <div class="plate" data-plate="0">
+          <figure class="dish-photo">
+            <img src="assets/salad.jpg" alt="Market plate" style="--zoom: 1.22; object-position: 50% 46%" />
+          </figure>
+        </div>
+        <div class="plate" data-plate="1">
+          <figure class="dish-photo">
+            <img src="assets/greens.jpg" alt="Garden bowl" style="--zoom: 1.42; object-position: 50% 42%" />
+          </figure>
+        </div>
+        <div class="plate" data-plate="2">
+          <figure class="dish-photo">
+            <img src="assets/pasta.jpg" alt="Herb farfalle" style="--zoom: 1.45; object-position: 78% 50%" />
+          </figure>
+        </div>
+        <div class="plate" data-plate="3">
+          <figure class="dish-photo">
+            <img src="assets/grain.jpg" alt="Chickpea bowl" style="--zoom: 1.7; object-position: 52% 62%" />
+          </figure>
+        </div>
+        <div class="plate" data-plate="4">
+          <figure class="dish-photo">
+            <img src="assets/roast.jpg" alt="Roasted plate" style="--zoom: 1.9; object-position: 78% 58%" />
+          </figure>
+        </div>
+      </section>
+
+      <button class="replay" id="replay" type="button" hidden>Play</button>
+
+      <div class="scrub" id="scrub">
+        <div class="scrub-fill" id="scrubFill"></div>
+        <input id="scrubber" type="range" min="0" max="1000" value="0" aria-label="Scrub the reel" />
+      </div>
+    </div>
+  <aside class="wing wing-right">
+    <p class="kicker">Now on the cloth</p>
+    <p class="now-price" id="nowPrice">18</p>
+    <h2 id="nowName">Market plate</h2>
+    <p class="lede" id="nowNote">Avocado, tomato, chickpea, and a cold herb cream.</p>
+    <div class="thumbs">
+      <button class="thumb" type="button" data-dish="0"><img src="assets/salad.jpg" alt="" /><span>Market plate</span></button>
+      <button class="thumb" type="button" data-dish="1"><img src="assets/greens.jpg" alt="" /><span>Garden bowl</span></button>
+      <button class="thumb" type="button" data-dish="2"><img src="assets/pasta.jpg" alt="" /><span>Herb farfalle</span></button>
+      <button class="thumb" type="button" data-dish="3"><img src="assets/grain.jpg" alt="" /><span>Chickpea bowl</span></button>
+    </div>
+    <p class="aside-note">The reel moves on its own. Keep a plate if you want it at the table.</p>
+    <button class="keep" id="keepPlate" type="button">Keep this plate</button>
+    <div class="order-box">
+      <p class="kicker">Your table</p>
+      <p class="order-empty" id="orderEmpty">Nothing kept yet.</p>
+      <ul class="order" id="order"></ul>
+      <p class="order-total" id="orderTotal"></p>
+    </div>
+    <button class="keep reserve-open" id="reserveOpen" type="button">Hold a table</button>
+    <p class="hold" id="hold" hidden></p>
+  </aside>
+  </div>
+
+  <dialog class="sheet" id="sheet">
+    <form method="dialog" id="reserveForm">
+      <div class="sheet-head">
+        <div>
+          <p class="eyebrow">ORLA</p>
+          <h2>Hold a table</h2>
+        </div>
+        <button class="icon-btn" id="sheetClose" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+      <label>Name<input name="name" required placeholder="Your name" /></label>
+      <label>Evening<input name="when" type="date" required /></label>
+      <label>Guests
+        <select name="guests">
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+        </select>
+      </label>
+      <button class="solid" id="confirm" type="submit" value="ok">Request the table</button>
+      <p class="note" id="note"></p>
+    </form>
+  </dialog>
+
+  <script src="motion.js"></script>
+</body>
+</html>
