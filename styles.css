@@ -87,9 +87,52 @@ button, input, select { font: inherit; color: inherit; }
 
 .room { margin: 0; width: 100%; }
 
+.avail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+
+.avail li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(246, 241, 231, 0.12);
+  font-size: 15px;
+}
+
+.avail .price {
+  color: #e7c27a;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+}
+
+.avail button {
+  border: 0;
+  border-radius: 999px;
+  background: #f4f0e6;
+  color: #1c1b19;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.avail button:disabled {
+  background: transparent;
+  color: rgba(246, 241, 231, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(246, 241, 231, 0.22);
+  cursor: default;
+}
+
 .room img {
   width: 100%;
-  height: clamp(160px, 28vh, 320px);
+  height: clamp(88px, 14vh, 160px);
   object-fit: cover;
   border-radius: 18px 18px 72px 18px;
   display: block;
@@ -196,6 +239,17 @@ button, input, select { font: inherit; color: inherit; }
 }
 
 .keep.reserve-open { background: #9d1d26; color: #fff; }
+
+.keep.quiet {
+  background: transparent;
+  color: var(--cream);
+  box-shadow: inset 0 0 0 1px rgba(246, 241, 231, 0.35);
+}
+
+.keep:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
 
 .order-box {
   width: 100%;
@@ -389,6 +443,13 @@ body:not(.is-paused) #playIcon .play-tri { display: none; }
   pointer-events: none;
 }
 
+.menu li.off span {
+  color: #9a9388;
+  text-decoration: line-through;
+}
+
+.menu li.off em { color: #b4232c; }
+
 .menu li[data-dish] { cursor: pointer; }
 .menu li[data-dish]:hover span { color: #111; }
 
@@ -532,6 +593,47 @@ body:not(.is-paused) #playIcon .play-tri { display: none; }
 }
 
 .sheet::backdrop { background: rgba(12, 18, 15, 0.45); }
+
+.sheet-lede {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #5c574f;
+}
+
+.kitchen-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kitchen-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid #e4dccf;
+  font-size: 15px;
+}
+
+.kitchen-list button {
+  border: 0;
+  border-radius: 999px;
+  background: #24382f;
+  color: #f6f1e7;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kitchen-list button.is-off {
+  background: transparent;
+  color: #9d1d26;
+  box-shadow: inset 0 0 0 1px #e4dccf;
+}
 
 .sheet-head {
   display: flex;

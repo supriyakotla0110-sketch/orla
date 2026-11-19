@@ -127,7 +127,7 @@ function showDish(id) {
   if (nowNote) nowNote.textContent = dish.note;
   if (nowPrice) nowPrice.textContent = dish.price;
   thumbs.forEach((thumb) => thumb.classList.toggle("on", Number(thumb.dataset.dish) === id));
-  if (typeof paintOrder === "function") paintOrder();
+  if (typeof refreshCurrent === "function") refreshCurrent();
 }
 
 function render(t) {
@@ -250,42 +250,122 @@ document.getElementById("reserveForm").addEventListener("submit", (event) => {
   setTimeout(() => sheet.close(), 900);
 });
 
-const orderList = document.getElementById("order");
-const orderEmpty = document.getElementById("orderEmpty");
-const orderTotal = document.getElementById("orderTotal");
-const keepPlate = document.getElementById("keepPlate");
+const availList = document.getElementById("avail");
+const prepList = document.getElementById("prep");
+const prepEmpty = document.getElementById("prepEmpty");
+const requestPlate = document.getElementById("requestPlate");
+const nowStatus = document.getElementById("nowStatus");
+const kitchen = document.getElementById("kitchen");
+const kitchenList = document.getElementById("kitchenList");
 const holdBox = document.getElementById("hold");
-let order = [];
+
+pickable.forEach((row) => {
+  const price = row.querySelector("em");
+  if (price) row.dataset.price = price.textContent;
+});
+
+let board = { available: dishes.map(() => true), requests: dishes.map(() => 0) };
 try {
-  order = JSON.parse(localStorage.getItem("orla-order") || "[]");
+  const saved = JSON.parse(localStorage.getItem("orla-board") || "null");
+  if (saved && Array.isArray(saved.available) && Array.isArray(saved.requests)) board = saved;
 } catch (error) {
-  order = [];
+  board = { available: dishes.map(() => true), requests: dishes.map(() => 0) };
 }
 
-function paintOrder() {
-  orderList.innerHTML = "";
-  orderEmpty.hidden = order.length > 0;
-  let sum = 0;
-  order.forEach((item, index) => {
-    sum += Number(item.price);
+function saveBoard() {
+  localStorage.setItem("orla-board", JSON.stringify(board));
+  paintBoard();
+}
+
+function requestDish(id) {
+  if (!board.available[id]) return;
+  board.requests[id] += 1;
+  saveBoard();
+}
+
+function paintBoard() {
+  availList.innerHTML = "";
+  dishes.forEach((dish, id) => {
     const row = document.createElement("li");
     const name = document.createElement("span");
-    name.textContent = `${item.name} · ${item.price}`;
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.textContent = "Remove";
-    remove.addEventListener("click", () => {
-      order.splice(index, 1);
-      localStorage.setItem("orla-order", JSON.stringify(order));
-      paintOrder();
-    });
-    row.append(name, remove);
-    orderList.append(row);
+    name.textContent = dish.name;
+    const price = document.createElement("span");
+    price.className = "price";
+    price.textContent = dish.price;
+    const add = document.createElement("button");
+    add.type = "button";
+    add.textContent = board.available[id] ? "Add" : "Off";
+    add.disabled = !board.available[id];
+    add.addEventListener("click", () => requestDish(id));
+    row.append(name, price, add);
+    availList.append(row);
   });
-  orderTotal.textContent = order.length ? `Table total ${sum}` : "";
+
+  prepList.innerHTML = "";
+  let any = false;
+  dishes.forEach((dish, id) => {
+    const count = board.requests[id] || 0;
+    if (!count) return;
+    any = true;
+    const row = document.createElement("li");
+    const name = document.createElement("span");
+    name.textContent = `${dish.name} · ${count}`;
+    const less = document.createElement("button");
+    less.type = "button";
+    less.textContent = "Less";
+    less.addEventListener("click", () => {
+      board.requests[id] = Math.max(0, board.requests[id] - 1);
+      saveBoard();
+    });
+    row.append(name, less);
+    prepList.append(row);
+  });
+  prepEmpty.hidden = any;
+
+  pickable.forEach((row) => {
+    const id = Number(row.dataset.dish);
+    const on = board.available[id] !== false;
+    row.classList.toggle("off", !on);
+    const price = row.querySelector("em");
+    if (price) price.textContent = on ? row.dataset.price : "Off";
+  });
+
+  kitchenList.innerHTML = "";
+  dishes.forEach((dish, id) => {
+    const row = document.createElement("li");
+    const name = document.createElement("span");
+    const waiting = board.requests[id] || 0;
+    name.textContent = waiting ? `${dish.name} · ${waiting} waiting` : dish.name;
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    const on = board.available[id] !== false;
+    toggle.textContent = on ? "On" : "Off";
+    toggle.classList.toggle("is-off", !on);
+    toggle.addEventListener("click", () => {
+      board.available[id] = !on;
+      saveBoard();
+    });
+    row.append(name, toggle);
+    kitchenList.append(row);
+  });
+
+  refreshCurrent();
+}
+
+function refreshCurrent() {
   const current = dishes[shown];
-  const kept = current && order.some((item) => item.name === current.name);
-  keepPlate.textContent = kept ? "On the table" : "Keep this plate";
+  const open = current && board.available[shown] !== false;
+  if (nowStatus) {
+    nowStatus.textContent = !current
+      ? "Available tonight."
+      : open
+        ? "Available tonight. Request it before you arrive."
+        : "Off tonight. The kitchen cannot serve this plate.";
+  }
+  if (requestPlate) {
+    requestPlate.disabled = !open;
+    requestPlate.textContent = open ? "Request this plate" : "Off tonight";
+  }
 }
 
 function paintHold(hold) {
@@ -297,15 +377,35 @@ function paintHold(hold) {
   holdBox.textContent = `Table held for ${hold.name} · ${hold.when} · ${hold.guests} guests.`;
 }
 
-keepPlate.addEventListener("click", () => {
-  const dish = dishes[shown];
-  if (!dish || order.some((item) => item.name === dish.name)) return;
-  order.push({ name: dish.name, price: dish.price });
-  localStorage.setItem("orla-order", JSON.stringify(order));
-  paintOrder();
+requestPlate.addEventListener("click", () => requestDish(shown));
+
+document.getElementById("kitchenOpen").addEventListener("click", (event) => {
+  event.stopPropagation();
+  setPlaying(false);
+  kitchen.showModal();
 });
 
-paintOrder();
+document.getElementById("kitchenClose").addEventListener("click", () => kitchen.close());
+
+kitchen.addEventListener("click", (event) => {
+  if (event.target === kitchen) kitchen.close();
+});
+
+kitchen.addEventListener("close", () => {
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) setPlaying(true);
+});
+
+window.addEventListener("storage", (event) => {
+  if (event.key !== "orla-board" || !event.newValue) return;
+  try {
+    board = JSON.parse(event.newValue);
+    paintBoard();
+  } catch (error) {
+    board = { available: dishes.map(() => true), requests: dishes.map(() => 0) };
+  }
+});
+
+paintBoard();
 try {
   paintHold(JSON.parse(localStorage.getItem("orla-hold") || "null"));
 } catch (error) {
