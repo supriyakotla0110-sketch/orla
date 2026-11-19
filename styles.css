@@ -82,6 +82,20 @@ button, input, select { font: inherit; color: inherit; }
   width: 100%;
 }
 
+.wing-left { overflow: hidden; }
+
+.wing-left .avail {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.wing-left .order-box {
+  flex: none;
+  padding-top: 8px;
+  border-top: 1px solid rgba(246, 241, 231, 0.12);
+}
+
 .wing::before {
   content: "";
   position: absolute;
@@ -787,7 +801,8 @@ body:not(.is-paused) #playIcon .play-tri { display: none; }
     display: flex;
     flex-direction: column;
   }
-  .wing { height: auto; overflow: visible; }
+  .wing, .wing-left { height: auto; overflow: visible; }
+  .wing-left .avail { overflow: visible; }
   .stage {
     width: min(100%, 520px);
     height: auto;

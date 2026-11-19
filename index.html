@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=model" />
+  <link rel="stylesheet" href="styles.css?v=side" />
 </head>
 <body>
   <div class="app">
@@ -55,6 +55,12 @@
         <button type="button" data-add="4">Add</button>
       </li>
     </ul>
+    <div class="order-box">
+      <p class="kicker">To prepare</p>
+      <p class="order-empty" id="prepEmpty">Nothing requested yet.</p>
+      <ul class="order" id="prep"></ul>
+    </div>
+    <button class="keep quiet" id="kitchenOpen" type="button">Update availability</button>
   </aside>
     <div class="stage" id="stage">
       <div class="linen" aria-hidden="true"></div>
@@ -150,12 +156,6 @@
     <p class="lede" id="nowNote">Avocado, tomato, chickpea, and a cold herb cream.</p>
     <p class="aside-note" id="nowStatus">Available tonight.</p>
     <button class="keep" id="requestPlate" type="button">Request this plate</button>
-    <div class="order-box">
-      <p class="kicker">To prepare</p>
-      <p class="order-empty" id="prepEmpty">Nothing requested yet.</p>
-      <ul class="order" id="prep"></ul>
-    </div>
-    <button class="keep quiet" id="kitchenOpen" type="button">Update availability</button>
     <button class="keep reserve-open" id="reserveOpen" type="button">Hold a table</button>
     <p class="hold" id="hold" hidden></p>
   </aside>
